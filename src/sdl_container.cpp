@@ -1,23 +1,21 @@
-/*#include "container_sdl.h"
-
-#define _USE_MATH_DEFINES
+#include "sdl_container.h"
 
 #include <math.h>
 #include <iostream>
 
 using namespace litehtml;
 
-container_sdl::container_sdl(litehtml::context* html_context, SDL_Renderer* renderer){
+sdl_container::sdl_container(litehtml::context* html_context, SDL_Renderer* renderer){
   // std::cout << "#ctor\n";
   m_renderer = renderer;
   TTF_Init();
   SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
 }
 
-container_sdl::~container_sdl(void) {
+sdl_container::~sdl_container(void) {
 }
 
-litehtml::uint_ptr container_sdl::create_font( const litehtml::tchar_t* faceName, int size, int weight, litehtml::font_style italic, unsigned int decoration, litehtml::font_metrics* fm ) {
+litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName, int size, int weight, litehtml::font_style italic, unsigned int decoration, litehtml::font_metrics* fm) {
     // std::cout << "[create_font] faceName: " << faceName
     //     << ", size: " << size
     //     << ", weight: " << weight
@@ -44,16 +42,16 @@ litehtml::uint_ptr container_sdl::create_font( const litehtml::tchar_t* faceName
 
     TTF_Font* font;
 
-    if (m_fonts[key]) {
+    /*if (m_fonts[key]) {
         font = m_fonts[key];
-    } else {
+    } else {*/
         // fontPath.c_str() + fnt_name
         font = TTF_OpenFont(("../data/fonts/" + fontName + ".ttf").c_str(), size);
 
         // std::cout << "[create_font] OpenFont\n";
 
-        m_fonts[key] = font;
-    }
+        /*m_fonts[key] = font;
+    }*/
 
     //If there was an error in loading the font
     if(font == nullptr) {
@@ -103,18 +101,18 @@ litehtml::uint_ptr container_sdl::create_font( const litehtml::tchar_t* faceName
     return (uint_ptr) font;
 }
 
-void container_sdl::delete_font( litehtml::uint_ptr hFont ) {
+void sdl_container::delete_font(litehtml::uint_ptr hFont) {
     // todo fix segfault
     return;
 
     TTF_Font* font = (TTF_Font*)hFont;
 
     if(font) {
-        TTF_CloseFont( font );
+        TTF_CloseFont(font);
     }
 }
 
-int container_sdl::text_width( const litehtml::tchar_t* text, litehtml::uint_ptr hFont ) {
+int sdl_container::text_width(const litehtml::tchar_t* text, litehtml::uint_ptr hFont) {
     TTF_Font* font = (TTF_Font*)hFont;
     
     if(!font) {
@@ -127,7 +125,7 @@ int container_sdl::text_width( const litehtml::tchar_t* text, litehtml::uint_ptr
     return iWidth;
 }
 
-void container_sdl::draw_text( litehtml::uint_ptr hdc, const litehtml::tchar_t* text, litehtml::uint_ptr hFont, litehtml::web_color color, const litehtml::position& pos ) {
+void sdl_container::draw_text(litehtml::uint_ptr hdc, const litehtml::tchar_t* text, litehtml::uint_ptr hFont, litehtml::web_color color, const litehtml::position& pos) {
     SDL_Color sdlcolor={color.red, color.green, color.blue, color.alpha};
     SDL_Surface *info;
     TTF_Font* font = (TTF_Font*)hFont;
@@ -145,22 +143,22 @@ void container_sdl::draw_text( litehtml::uint_ptr hdc, const litehtml::tchar_t* 
     }
 }
 
-int container_sdl::pt_to_px( int pt ) {
+int sdl_container::pt_to_px(int pt) {
     return pt; // (int) round(pt * 125.0 / 72.0);
 }
 
-int container_sdl::get_default_font_size() const {
+int sdl_container::get_default_font_size() const {
     return 16;
 }
 
-void container_sdl::draw_list_marker( litehtml::uint_ptr hdc, const litehtml::list_marker& marker ) {
+void sdl_container::draw_list_marker(litehtml::uint_ptr hdc, const litehtml::list_marker& marker) {
 }
 
-void container_sdl::load_image( const litehtml::tchar_t* src, const litehtml::tchar_t* baseurl, bool redraw_on_ready ) {
+void sdl_container::load_image(const litehtml::tchar_t* src, const litehtml::tchar_t* baseurl, bool redraw_on_ready) {
     std::cout << "#loadImage " << src << "\n";
 }
 
-void container_sdl::get_image_size( const litehtml::tchar_t* src, const litehtml::tchar_t* baseurl, litehtml::size& sz ) {
+void sdl_container::get_image_size(const litehtml::tchar_t* src, const litehtml::tchar_t* baseurl, litehtml::size& sz) {
   std::cout << "#getImageSize " << src << "\n";
 
   std::string basePath = "../examples/scenes/";
@@ -173,7 +171,7 @@ void container_sdl::get_image_size( const litehtml::tchar_t* src, const litehtml
   // SDL_FreeSurface(image);
 }
 
-void container_sdl::draw_background( litehtml::uint_ptr hdc, const litehtml::background_paint& bg ) {
+void sdl_container::draw_background(litehtml::uint_ptr hdc, const litehtml::background_paint& bg) {
     if (bg.image.empty()) {
       SDL_Rect fillRect = { bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height };
       SDL_SetRenderDrawColor(m_renderer, bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha);
@@ -202,11 +200,10 @@ void container_sdl::draw_background( litehtml::uint_ptr hdc, const litehtml::bac
     }
 }
 
-void container_sdl::make_url(const litehtml::tchar_t* url,  const litehtml::tchar_t* basepath, litehtml::tstring& out)
-{
+void sdl_container::make_url(const litehtml::tchar_t* url,  const litehtml::tchar_t* basepath, litehtml::tstring& out) {
 }
 
-void container_sdl::draw_borders(litehtml::uint_ptr hdc, const litehtml::borders& borders, const litehtml::position& draw_pos, bool root) {
+void sdl_container::draw_borders(litehtml::uint_ptr hdc, const litehtml::borders& borders, const litehtml::position& draw_pos, bool root) {
     if (borders.top.width != 0 && borders.top.style > litehtml::border_style_hidden) {
         SDL_Rect fillRect = { draw_pos.x, draw_pos.y, draw_pos.width, draw_pos.height };
         SDL_SetRenderDrawColor(m_renderer, borders.top.color.red, borders.top.color.green, borders.top.color.blue, borders.top.color.alpha);
@@ -214,55 +211,29 @@ void container_sdl::draw_borders(litehtml::uint_ptr hdc, const litehtml::borders
     }
 }
 
-void container_sdl::transform_text(litehtml::tstring& text, litehtml::text_transform tt) {
+void sdl_container::transform_text(litehtml::tstring& text, litehtml::text_transform tt) {
 }
 
-void container_sdl::set_clip( const litehtml::position& pos, const litehtml::border_radiuses& bdr_radius, bool valid_x, bool valid_y ) {
+void sdl_container::set_clip(const litehtml::position& pos, const litehtml::border_radiuses& bdr_radius, bool valid_x, bool valid_y) {
 }
 
-void container_sdl::del_clip() {
+void sdl_container::del_clip() {
 }
 
-void container_sdl::clear_images() {
+void sdl_container::clear_images() {
 }
 
-void container_sdl::get_client_rect(litehtml::position& client) const {
-
-}
-
-void container_sdl::on_anchor_click(const litehtml::tchar_t* url, const litehtml::element::ptr& el) {
-
-}
-
-void container_sdl::set_cursor(const litehtml::tchar_t* cursor) {
-
-}
-
-void container_sdl::import_css(litehtml::tstring& text, const litehtml::tstring& url, litehtml::tstring& baseurl) {
-
-}
-
-void container_sdl::set_caption(const litehtml::tchar_t* caption) {
-
-}
-
-void container_sdl::set_base_url(const litehtml::tchar_t* base_url) {
-
-}
-
-
-const litehtml::tchar_t* container_sdl::get_default_font_name() const
-{
+const litehtml::tchar_t* sdl_container::get_default_font_name() const {
     return _t("sans-serif");
 }
 
-std::shared_ptr<litehtml::element>  container_sdl::create_element(const litehtml::tchar_t *tag_name,
+std::shared_ptr<litehtml::element>  sdl_container::create_element(const litehtml::tchar_t *tag_name,
                                     const litehtml::string_map &attributes,
                                     const std::shared_ptr<litehtml::document> &doc) {
   return 0;
 }
 
-void container_sdl::get_media_features(litehtml::media_features& media) const {
+void sdl_container::get_media_features(litehtml::media_features& media) const {
     litehtml::position client;
     get_client_rect(client);
     media.type      = litehtml::media_type_screen;
@@ -276,11 +247,10 @@ void container_sdl::get_media_features(litehtml::media_features& media) const {
     media.resolution  = 96;
 }
 
-void container_sdl::get_language(litehtml::tstring& language, litehtml::tstring& culture) const {
+void sdl_container::get_language(litehtml::tstring& language, litehtml::tstring& culture) const {
     language = _t("en");
     culture = _t("");
 }
 
-void container_sdl::link(const std::shared_ptr<litehtml::document> &ptr, const litehtml::element::ptr& el){
+void sdl_container::link(const std::shared_ptr<litehtml::document> &ptr, const litehtml::element::ptr& el){
 }
-*/
