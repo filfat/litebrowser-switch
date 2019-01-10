@@ -23,7 +23,7 @@ int main (int argc, char* argv[]) {
     sdl_container *container = new sdl_container(&html_context, _renderer);
     //html_context.load_master_stylesheet(master_css);
 
-    litehtml::document::ptr m_doc = litehtml::document::createFromString("<!DOCTYPE html><html><head><title>Hello World</title></head><body><div class=\"test\">test</div><div style=\"background: #0000ff; display:block; width: 25px; height: 25px; border: 5px solid #000;\">xx</div><style>html, body {background-color: #ffaa00;} .test {background-color: #0000ff; width: 250px; height: 75px;}</style></body></html>", container, &html_context, NULL);
+    litehtml::document::ptr m_doc = litehtml::document::createFromString("<!DOCTYPE html><html><head><title>Hello World</title></head><body><div class=\"test\">test</div><div style=\"background: #0000ff; display:block; width: 25px; height: 25px; border: 5px solid #000;\">xx</div><style>html, body {background-color: #ffaa00; width: 100vw; height: 100vh} .test {background-color: #0000ff; width: 250px; height: 75px;}</style></body></html>", container, &html_context, NULL);
     litehtml::position *pos = new litehtml::position(0, 0, 1280, 720);
     m_doc->render(1280);
 
@@ -33,8 +33,6 @@ int main (int argc, char* argv[]) {
         m_doc->draw(NULL, 0, 0, pos);
 
         SDL_RenderPresent(_renderer);
-        SDL_Delay(10);
-
         consoleUpdate(NULL);
     }
 

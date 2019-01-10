@@ -16,7 +16,7 @@ sdl_container::~sdl_container(void) {
 
 litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName, int size, int weight, litehtml::font_style italic, unsigned int decoration, litehtml::font_metrics* fm) {
     printf("sdl_container->create_font\n");
-    return nullptr;
+
     // std::cout << "[create_font] faceName: " << faceName
     //     << ", size: " << size
     //     << ", weight: " << weight
@@ -27,15 +27,15 @@ litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName,
     // string_vector fonts;
     // split_string(faceName, fonts, _t(","));
 
-    std::string fontPath = "./fonts/";
+    std::string fontPath = "romfs:/fonts/";
 
-    std::string fontName = "Roboto-Medium";
-    std::string key = "Roboto-Medium";
+    std::string fontName = "NintendoStandard";
+    std::string key = "NintendoStandard";
 
-    if(weight >= 700) {
+    /*if(weight >= 700) {
         fontName = "Roboto-Bold";
         key = "Roboto-Bold";
-    }
+    }*/
 
     key += "-" + std::to_string(size) + "px";
 
@@ -47,7 +47,7 @@ litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName,
         font = m_fonts[key];
     } else {*/
         // fontPath.c_str() + fnt_name
-        font = TTF_OpenFont(("../data/fonts/" + fontName + ".ttf").c_str(), size);
+        font = TTF_OpenFont((fontPath + fontName + ".ttf").c_str(), size);
 
         // std::cout << "[create_font] OpenFont\n";
 
@@ -114,7 +114,7 @@ void sdl_container::delete_font(litehtml::uint_ptr hFont) {
 }
 
 int sdl_container::text_width(const litehtml::tchar_t* text, litehtml::uint_ptr hFont) {
-    return 0; //TODO
+    //return 0; //TODO
 
     TTF_Font* font = (TTF_Font*)hFont;
     

@@ -36,7 +36,7 @@ SOURCES		:=	src litehtml/src litehtml/src/gumbo
 DATA		:=	data
 INCLUDES	:=	include litehtml/src litehtml/src/gumbo
 EXEFS_SRC	:=	exefs_src
-#ROMFS	:=	romfs
+ROMFS		:=	resources
 
 APP_TITLE   := litebrowser
 APP_AUTHOR  := Filiph Sandstrom, litehtml
@@ -47,7 +47,7 @@ APP_VERSION := 0.0.1
 #---------------------------------------------------------------------------------
 ARCH	:=	-march=armv8-a -mtune=cortex-a57 -mtp=soft -fPIE
 
-CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
+CFLAGS	:=	-g -Wall -O0 -ffunction-sections \
 			$(ARCH) $(DEFINES)
 
 CFLAGS	+=	$(INCLUDE) -D__SWITCH__
