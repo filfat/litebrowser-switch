@@ -35,8 +35,7 @@ litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName,
         return nullptr;
     }
 
-    int ttfStyle = TTF_STYLE_NORMAL;
-
+    /*int ttfStyle = TTF_STYLE_NORMAL;
     if(italic == fontStyleItalic) {
         ttfStyle = ttfStyle | TTF_STYLE_ITALIC;
     }
@@ -53,7 +52,7 @@ litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName,
         ttfStyle = ttfStyle | TTF_STYLE_BOLD;
     }
 
-    TTF_SetFontStyle(font, ttfStyle);
+    TTF_SetFontStyle(font, ttfStyle);*/
 
     int iWidth = 0, iHeight = 0;
     TTF_SizeText(font, _t("x"), &iWidth, &iHeight);
@@ -128,14 +127,14 @@ void sdl_container::load_image(const litehtml::tchar_t* src, const litehtml::tch
 }
 
 void sdl_container::get_image_size(const litehtml::tchar_t* src, const litehtml::tchar_t* baseurl, litehtml::size& sz) {
-  printf("sdl_container->get_image_size-> %s\n", src);
+    printf("sdl_container->get_image_size-> %s\n", src);
 
-  std::string basePath = "../examples/scenes/";
-  auto image = IMG_Load((basePath + src).c_str());
-  sz.width = image->w;
-  sz.height = image->h;
+    std::string basePath = "../examples/scenes/";
+    auto image = IMG_Load((basePath + src).c_str());
+    sz.width = image->w;
+    sz.height = image->h;
 
-  // SDL_FreeSurface(image);
+    // SDL_FreeSurface(image);
 }
 
 void sdl_container::draw_background(litehtml::uint_ptr hdc, const litehtml::background_paint& bg) {
@@ -191,7 +190,7 @@ const litehtml::tchar_t* sdl_container::get_default_font_name() const {
 std::shared_ptr<litehtml::element>  sdl_container::create_element(const litehtml::tchar_t *tag_name,
                                     const litehtml::string_map &attributes,
                                     const std::shared_ptr<litehtml::document> &doc) {
-  return 0;
+    return 0;
 }
 
 void sdl_container::get_media_features(litehtml::media_features& media) const {
