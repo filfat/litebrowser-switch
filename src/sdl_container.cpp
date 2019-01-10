@@ -5,11 +5,8 @@
 
 using namespace litehtml;
 
-sdl_container::sdl_container(litehtml::context* html_context, SDL_Renderer* renderer){
-  // std::cout << "#ctor\n";
-  m_renderer = renderer;
-  TTF_Init();
-  SDL_SetRenderDrawBlendMode(m_renderer, SDL_BLENDMODE_BLEND);
+sdl_container::sdl_container(litehtml::context* html_context, SDL_Renderer* renderer) {
+    m_renderer = renderer;
 }
 
 sdl_container::~sdl_container(void) {
@@ -200,7 +197,7 @@ void sdl_container::draw_background(litehtml::uint_ptr hdc, const litehtml::back
     }
 }
 
-void sdl_container::make_url(const litehtml::tchar_t* url,  const litehtml::tchar_t* basepath, litehtml::tstring& out) {
+void sdl_container::make_url(const litehtml::tchar_t* url,  const litehtml::tchar_t* basepath, const litehtml::tstring& out) {
 }
 
 void sdl_container::draw_borders(litehtml::uint_ptr hdc, const litehtml::borders& borders, const litehtml::position& draw_pos, bool root) {
@@ -218,9 +215,6 @@ void sdl_container::set_clip(const litehtml::position& pos, const litehtml::bord
 }
 
 void sdl_container::del_clip() {
-}
-
-void sdl_container::clear_images() {
 }
 
 const litehtml::tchar_t* sdl_container::get_default_font_name() const {
@@ -253,4 +247,28 @@ void sdl_container::get_language(litehtml::tstring& language, litehtml::tstring&
 }
 
 void sdl_container::link(const std::shared_ptr<litehtml::document> &ptr, const litehtml::element::ptr& el){
+}
+
+void sdl_container::on_anchor_click(const litehtml::tchar_t* url, const litehtml::element::ptr& el) {
+
+}
+
+void sdl_container::set_cursor(const litehtml::tchar_t* cursor) {
+
+}
+
+void sdl_container::import_css(litehtml::tstring& text, const litehtml::tstring& url, litehtml::tstring& baseurl) {
+
+}
+
+void sdl_container::set_caption(const litehtml::tchar_t* caption) {
+
+}
+
+void sdl_container::set_base_url(const litehtml::tchar_t* base_url) {
+
+}
+
+void sdl_container::get_client_rect(litehtml::position& client) const {
+
 }
