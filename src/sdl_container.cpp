@@ -17,18 +17,7 @@ sdl_container::~sdl_container(void) {
 litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName, int size, int weight, litehtml::font_style italic, unsigned int decoration, litehtml::font_metrics* fm) {
     printf("sdl_container->create_font\n");
 
-    // std::cout << "[create_font] faceName: " << faceName
-    //     << ", size: " << size
-    //     << ", weight: " << weight
-    //     << ", italic: " << italic
-    //     << ", decoration: " << decoration << std::endl;
-
-    // TODO load specific fonts
-    // string_vector fonts;
-    // split_string(faceName, fonts, _t(","));
-
     std::string fontPath = "romfs:/fonts/";
-
     std::string fontName = "NintendoStandard";
     std::string key = "NintendoStandard";
 
@@ -38,26 +27,11 @@ litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName,
     }*/
 
     key += "-" + std::to_string(size) + "px";
+    TTF_Font* font = TTF_OpenFont((fontPath + fontName + ".ttf").c_str(), size);
 
-    // std::cout << key << "\n" << fontName << "\n";
 
-    TTF_Font* font;
-
-    /*if (m_fonts[key]) {
-        font = m_fonts[key];
-    } else {*/
-        // fontPath.c_str() + fnt_name
-        font = TTF_OpenFont((fontPath + fontName + ".ttf").c_str(), size);
-
-        // std::cout << "[create_font] OpenFont\n";
-
-        /*m_fonts[key] = font;
-    }*/
-
-    //If there was an error in loading the font
     if(font == nullptr) {
-        std::cout << "[create_font] can't load ttf: " << fontName << std::endl;
-        std::cout << "TTF_OpenFont:" << TTF_GetError();
+        printf("sdl_container->draw_text->Error: %s\n", TTF_GetError());
         return nullptr;
     }
 
@@ -91,21 +65,12 @@ litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName,
         fm->height    = TTF_FontHeight(font);
         fm->x_height  = iWidth;
         fm->draw_spaces = italic == fontStyleItalic || decoration;
-
-        // std::cout << "[create_font] ascent: " << fm->ascent
-        //     << ", descent: " << fm->descent
-        //     << ", height: " << fm->height
-        //     << ", x_height: " << fm->x_height
-        //     << ", draw_spaces: " << fm->draw_spaces  << std::endl;
     }
 
     return (uint_ptr) font;
 }
 
 void sdl_container::delete_font(litehtml::uint_ptr hFont) {
-    // todo fix segfault
-    return;
-
     TTF_Font* font = (TTF_Font*)hFont;
 
     if(font) {
@@ -114,12 +79,9 @@ void sdl_container::delete_font(litehtml::uint_ptr hFont) {
 }
 
 int sdl_container::text_width(const litehtml::tchar_t* text, litehtml::uint_ptr hFont) {
-    //return 0; //TODO
-
     TTF_Font* font = (TTF_Font*)hFont;
     
     if(!font) {
-        // std::cout << "[text_width](" << text << ") font: null" << std::endl;
         return 0;
     }
 
@@ -129,24 +91,25 @@ int sdl_container::text_width(const litehtml::tchar_t* text, litehtml::uint_ptr 
 }
 
 void sdl_container::draw_text(litehtml::uint_ptr hdc, const litehtml::tchar_t* text, litehtml::uint_ptr hFont, litehtml::web_color color, const litehtml::position& pos) {
-    //printf("sdl_container->draw_text->%s\n", text);
-    return;
-
     SDL_Color sdlcolor={color.red, color.green, color.blue, color.alpha};
     SDL_Surface *info;
     TTF_Font* font = (TTF_Font*)hFont;
 
-    if(!(info=TTF_RenderUTF8_Blended(font, text, sdlcolor))) {
-        //handle error here, perhaps print TTF_GetError at least
-    } else {
-        // fixme - use baseline correctly
+    if(!(info = TTF_RenderUTF8_Blended(font, text, sdlcolor))) {
+        printf("sdl_container->draw_text->Error: %s\n", TTF_GetError());
+        SDL_FreeSurface(info);
 
-        SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, info);
-        SDL_Rect src = { 0, 0, info->w, info->h };
-        SDL_Rect dst = { pos.x, pos.y - (int) (pos.height * 0.5), info->w, info->h };
-        SDL_RenderCopy(m_renderer, texture, &src, &dst);
-        SDL_DestroyTexture(texture);
+        return;
     }
+
+    // fixme - use baseline correctly
+
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(m_renderer, info);
+    SDL_Rect src = { 0, 0, info->w, info->h };
+    SDL_Rect dst = { pos.x, pos.y - (int) (pos.height * 0.5), info->w, info->h };
+    SDL_RenderCopy(m_renderer, texture, &src, &dst);
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(info);
 }
 
 int sdl_container::pt_to_px(int pt) {
@@ -161,58 +124,48 @@ void sdl_container::draw_list_marker(litehtml::uint_ptr hdc, const litehtml::lis
 }
 
 void sdl_container::load_image(const litehtml::tchar_t* src, const litehtml::tchar_t* baseurl, bool redraw_on_ready) {
-    std::cout << "#loadImage " << src << "\n";
+    printf("sdl_container->load_image-> %s\n", src);
 }
 
 void sdl_container::get_image_size(const litehtml::tchar_t* src, const litehtml::tchar_t* baseurl, litehtml::size& sz) {
-  std::cout << "#getImageSize " << src << "\n";
+  printf("sdl_container->get_image_size-> %s\n", src);
 
   std::string basePath = "../examples/scenes/";
   auto image = IMG_Load((basePath + src).c_str());
   sz.width = image->w;
   sz.height = image->h;
 
-  std::cout << "width:" << image->w << " height" << image->h << "\n";
-
   // SDL_FreeSurface(image);
 }
 
 void sdl_container::draw_background(litehtml::uint_ptr hdc, const litehtml::background_paint& bg) {
-    printf("sdl_container->draw_background->x:%d, y:%d\n", bg.clip_box.x, bg.clip_box.y);
+    printf("sdl_container->draw_background->x:%d, y:%d, w:%d, h:%d\n", bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height);
 
     if (bg.image.empty()) {
       SDL_Rect fillRect = { bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height };
       SDL_SetRenderDrawColor(m_renderer, bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha);
       SDL_RenderFillRect(m_renderer, &fillRect);
-    } else {
-      // Drawing image
-      SDL_Rect fillRect = { bg.clip_box.x, bg.clip_box.y, bg.image_size.width, bg.image_size.height };
-
-      std::string basePath = "../examples/scenes/";
-      auto image = IMG_Load((basePath + bg.image).c_str());
-      auto texture = SDL_CreateTextureFromSurface(m_renderer, image);
-
-      SDL_Rect src = { 0, 0, image->w, image->h };
-      SDL_RenderCopy(m_renderer, texture, &src, &fillRect);
-
-      std::cout << "Drawing... " << bg.image.c_str() << " " << image->w << "," << image->h << "\n";
-
-      std::cout << fillRect.x
-         << "," << fillRect.y
-         << "," << fillRect.w
-         << "," << fillRect.h
-        << "\n";
-
-      SDL_DestroyTexture(texture);
-      SDL_FreeSurface(image);
+      return;
     }
+
+    SDL_Rect fillRect = { bg.clip_box.x, bg.clip_box.y, bg.image_size.width, bg.image_size.height };
+
+    std::string basePath = "../examples/scenes/";
+    auto image = IMG_Load((basePath + bg.image).c_str());
+    auto texture = SDL_CreateTextureFromSurface(m_renderer, image);
+
+    SDL_Rect src = { 0, 0, image->w, image->h };
+    SDL_RenderCopy(m_renderer, texture, &src, &fillRect);
+
+    SDL_DestroyTexture(texture);
+    SDL_FreeSurface(image);
 }
 
 void sdl_container::make_url(const litehtml::tchar_t* url,  const litehtml::tchar_t* basepath, const litehtml::tstring& out) {
 }
 
 void sdl_container::draw_borders(litehtml::uint_ptr hdc, const litehtml::borders& borders, const litehtml::position& draw_pos, bool root) {
-    printf("sdl_container->draw_borders->x:%d, y:%d\n", draw_pos.x, draw_pos.y);
+    printf("sdl_container->draw_borders->x:%d, y:%d, w:%d, h:%d\n", draw_pos.x, draw_pos.y, draw_pos.width, draw_pos.height);
 
     if (borders.top.width != 0 && borders.top.style > litehtml::border_style_hidden) {
         SDL_Rect fillRect = { draw_pos.x, draw_pos.y, draw_pos.width, draw_pos.height };

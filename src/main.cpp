@@ -8,16 +8,18 @@ SDL_Window *_window;
 SDL_Renderer *_renderer;
 
 int main (int argc, char* argv[]) {
-    consoleInit(NULL);
-    printf("Hello World!\n");
+    consoleDebugInit(debugDevice_SVC);
+    stdout = stderr;
+    
+    romfsInit();
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_CreateWindowAndRenderer(1280, 720, 0, &_window, &_renderer);
     SDL_SetRenderDrawColor(_renderer, 255, 255, 255, 255);
     SDL_SetRenderDrawBlendMode(_renderer, SDL_BLENDMODE_BLEND);
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
-    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_WEBP | IMG_INIT_TIF);
     TTF_Init();
+    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG | IMG_INIT_WEBP | IMG_INIT_TIF);
 
     litehtml::context html_context;
     sdl_container *container = new sdl_container(&html_context, _renderer);
@@ -42,5 +44,8 @@ int main (int argc, char* argv[]) {
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();
+
+    romfsExit();
+    consoleExit(NULL);
     return 0;
 }
