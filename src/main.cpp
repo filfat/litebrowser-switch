@@ -7,12 +7,14 @@
 
 #include "../litehtml/include/litehtml.h"
 #include "sdl_container.h"
+#include "http_loader.h"
 
 SDL_Window *_window;
 SDL_Renderer *_renderer;
 
 int main (int argc, char* argv[]) {
     consoleDebugInit(debugDevice_SVC);
+    consoleInit(NULL);
     stdout = stderr;
     
     romfsInit();
@@ -32,11 +34,13 @@ int main (int argc, char* argv[]) {
     std::ifstream css_stream("romfs:/master.css");
     std::string css((std::istreambuf_iterator<char>(css_stream)), std::istreambuf_iterator<char>());
 
+    http_loader *net = new http_loader();
+
     litehtml::context html_context;
     sdl_container *container = new sdl_container(&html_context, _renderer);
     html_context.load_master_stylesheet(css.c_str());
 
-    litehtml::document::ptr m_doc = litehtml::document::createFromString(doc.c_str(), container, &html_context, NULL);
+    litehtml::document::ptr m_doc = litehtml::document::createFromString(net->load_file("http://home.mcom.com/home/welcome.html").c_str(), container, &html_context, NULL);
     litehtml::position *pos = new litehtml::position(0, 0, 1280, 720);
     m_doc->render(1280);
 
