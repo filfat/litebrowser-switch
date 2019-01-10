@@ -32,9 +32,9 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	src litehtml/src
+SOURCES		:=	src litehtml/src litehtml/src/gumbo
 DATA		:=	data
-INCLUDES	:=	include litehtml/src
+INCLUDES	:=	include litehtml/src litehtml/src/gumbo
 EXEFS_SRC	:=	exefs_src
 #ROMFS	:=	romfs
 

@@ -7,12 +7,16 @@ using namespace litehtml;
 
 sdl_container::sdl_container(litehtml::context* html_context, SDL_Renderer* renderer) {
     m_renderer = renderer;
+
+    printf("sdl_container created...\n");
 }
 
 sdl_container::~sdl_container(void) {
 }
 
 litehtml::uint_ptr sdl_container::create_font(const litehtml::tchar_t* faceName, int size, int weight, litehtml::font_style italic, unsigned int decoration, litehtml::font_metrics* fm) {
+    printf("sdl_container->create_font\n");
+    return nullptr;
     // std::cout << "[create_font] faceName: " << faceName
     //     << ", size: " << size
     //     << ", weight: " << weight
@@ -110,6 +114,8 @@ void sdl_container::delete_font(litehtml::uint_ptr hFont) {
 }
 
 int sdl_container::text_width(const litehtml::tchar_t* text, litehtml::uint_ptr hFont) {
+    return 0; //TODO
+
     TTF_Font* font = (TTF_Font*)hFont;
     
     if(!font) {
@@ -123,6 +129,9 @@ int sdl_container::text_width(const litehtml::tchar_t* text, litehtml::uint_ptr 
 }
 
 void sdl_container::draw_text(litehtml::uint_ptr hdc, const litehtml::tchar_t* text, litehtml::uint_ptr hFont, litehtml::web_color color, const litehtml::position& pos) {
+    //printf("sdl_container->draw_text->%s\n", text);
+    return;
+
     SDL_Color sdlcolor={color.red, color.green, color.blue, color.alpha};
     SDL_Surface *info;
     TTF_Font* font = (TTF_Font*)hFont;
@@ -169,6 +178,8 @@ void sdl_container::get_image_size(const litehtml::tchar_t* src, const litehtml:
 }
 
 void sdl_container::draw_background(litehtml::uint_ptr hdc, const litehtml::background_paint& bg) {
+    printf("sdl_container->draw_background->x:%d, y:%d\n", bg.clip_box.x, bg.clip_box.y);
+
     if (bg.image.empty()) {
       SDL_Rect fillRect = { bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height };
       SDL_SetRenderDrawColor(m_renderer, bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha);
@@ -201,6 +212,8 @@ void sdl_container::make_url(const litehtml::tchar_t* url,  const litehtml::tcha
 }
 
 void sdl_container::draw_borders(litehtml::uint_ptr hdc, const litehtml::borders& borders, const litehtml::position& draw_pos, bool root) {
+    printf("sdl_container->draw_borders->x:%d, y:%d\n", draw_pos.x, draw_pos.y);
+
     if (borders.top.width != 0 && borders.top.style > litehtml::border_style_hidden) {
         SDL_Rect fillRect = { draw_pos.x, draw_pos.y, draw_pos.width, draw_pos.height };
         SDL_SetRenderDrawColor(m_renderer, borders.top.color.red, borders.top.color.green, borders.top.color.blue, borders.top.color.alpha);
@@ -212,6 +225,7 @@ void sdl_container::transform_text(litehtml::tstring& text, litehtml::text_trans
 }
 
 void sdl_container::set_clip(const litehtml::position& pos, const litehtml::border_radiuses& bdr_radius, bool valid_x, bool valid_y) {
+    printf("sdl_container->set_clip->x:%d, y:%d\n", valid_x, valid_y);
 }
 
 void sdl_container::del_clip() {
