@@ -1,11 +1,14 @@
 # Prerequisites
 *.d
+*.nacp
+*.pfs0
 
 # Compiled Object files
 *.slo
 *.lo
 *.o
 *.obj
+build/
 
 # Precompiled Headers
 *.gch
@@ -30,3 +33,6 @@
 *.exe
 *.out
 *.app
+*.nro
+*.nso
+*.elf
